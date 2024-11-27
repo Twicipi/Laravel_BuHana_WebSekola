@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kelas; // Menggunakan model Kelas untuk query ke database
+use App\Models\Kelas;
 use Illuminate\Http\Request;
 
 class KelasController extends Controller
@@ -83,29 +83,28 @@ class KelasController extends Controller
             'nama_wali_kelas.not_regex' => 'Nama wali kelas tidak boleh mengandung spasi ganda',
         ];
 
-        // Validasi input
+
         $validated = $request->validate($rules, $messages);
 
-        // Simpan data ke database
+
         Kelas::create($validated);
 
-        // Redirect ke halaman index dengan pesan sukses
+
         return redirect()->route('kelas.index')
             ->with('success', 'Data kelas berhasil ditambahkan');
     }
 
     public function edit($id)
     {
-        // Find the kelas by ID
+
         $kelas = Kelas::findOrFail($id);
 
-        // Return the edit view with the kelas data
         return view('kelas.edit', compact('kelas'));
     }
 
     public function update(Request $request, $id)
     {
-        // Validate the input
+
         $rules = [
             'lokasi_ruangan' => [
                 'required',
@@ -140,11 +139,10 @@ class KelasController extends Controller
 
     public function destroy($id)
     {
-        // Find the kelas and delete
+
         $kelas = Kelas::findOrFail($id);
         $kelas->delete();
 
-        // Redirect with success message
         return redirect()->route('kelas.index')->with('success', 'Data kelas berhasil dihapus');
     }
 }

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\GuruController;
 
 
 Route::get('/', function () {
@@ -24,6 +25,7 @@ Route::get('/kelas/edit/{id}', [KelasController::class, 'edit'])->name('kelas.ed
 Route::put('/kelas/{id}', [KelasController::class, 'update'])->name('kelas.update');
 Route::delete('/kelas/{id}', [KelasController::class, 'destroy'])->name('kelas.destroy');
 
+Route::resource('guru', GuruController::class);
 
 Route::get('/nyobain',[SiswaController::class, 'kelas'])->name('siswa.kelas');
 Route::get('/learning',[SiswaController::class, 'learning'])->name('siswa.learning');

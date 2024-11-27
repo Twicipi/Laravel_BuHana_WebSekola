@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
-
 use Illuminate\Http\Request;
 
 class SiswaController extends Controller
@@ -13,7 +12,7 @@ class SiswaController extends Controller
         $search = $request->input('search'); // Ambil input 'search' dari form
 
         // Query dengan kondisi pencarian jika 'search' tidak kosong
-        $data['siswa'] = DB::table('t_siswa')
+        $data['siswa'] = \App\Models\Siswa::orderBy('jenkel')
             ->when($search, function ($query, $search) {
                 return $query->where('nama_lengkap', 'LIKE', "%$search%")
                     ->orWhere('jenkel', 'LIKE', "%$search%");
@@ -47,25 +46,32 @@ class SiswaController extends Controller
     }
     public function store(Request $request)
     {
-        $request->validate([
+        $rule = [
             'nis' => 'required|numeric',
-            'nama_lengkap' => 'required|string',
+            'nama_lengkap' => 'required|regex:/^[a-zA-Z\s]+$/',
             'jenkel' => 'required',
             'goldar' => 'required',
-        ]);
+        ];
+
+        $request->validate($rule);
 
 
         try {
             $input = $request->except('_token');
-            $status = DB::table('t_siswa')->insert($input);
+            // $status = \App\Models\Siswa::create($input);
+            $siswa = new \App\Models\Siswa;
+            $siswa->nis = $input['nis'];
+            $siswa->nama_lengkap = $input['nama_lengkap'];
+            $siswa->jenkel = $input['jenkel'];
+            $siswa->goldar = $input['goldar'];
+            $status = $siswa->save();
+
 
 
             if ($status) {
                 return redirect()->route('siswa.index')->with('success', 'Data siswa berhasil disimpan');
             } else {
-                return redirect()->route('siswa.create')
-                    ->withInput() // Tambahkan ini
-                    ->with('error', 'Data siswa gagal disimpan');
+                return redirect()->route('siswa.create')->withInput()->with('error', 'Data siswa gagal disimpan');
             }
         } catch (\Exception $e) {
             return redirect()->route('siswa.create')
@@ -82,17 +88,23 @@ class SiswaController extends Controller
 
     function update(Request $request, $id)
     {
-        $request->validate([
+        $rule = [
             'nis' => 'required|numeric',
-            'nama_lengkap' => 'required|string',
+            'nama_lengkap' => 'required|regex:/^[a-zA-Z\s]+$/',
             'jenkel' => 'required',
             'goldar' => 'required',
-        ]);
+        ];
+        $request->validate($rule);
 
         $input = $request->all();
-        unset($input['_token']);
-        unset($input['_method']);
-        $status = DB::table('t_siswa')->where('id', $id)->update($input);
+        $siswa = \App\Models\Siswa::find($id);
+       // $siswa = new \App\Models\Siswa;
+        $siswa->nis = $input['nis'];
+        $siswa->nama_lengkap = $input['nama_lengkap'];
+        $siswa->jenkel = $input['jenkel'];
+        $siswa->goldar = $input['goldar'];
+        $status = $siswa->update();
+
         if ($status) {
             return redirect('/siswa')->with('success', 'Data siswa berhasil diubah');
         } else {
@@ -100,12 +112,13 @@ class SiswaController extends Controller
         }
     }
 
-    function destroy($id){
-        $status = DB::table('t_siswa')->where('id', $id)->delete();
-        if($status) {
+    function destroy($id)
+    {
+        $siswa = \App\Models\Siswa::find($id);
+        $status = $siswa->delete();
+        if ($status) {
             return redirect('/siswa')->with('success', 'Data siswa berhasil dihapus');
-        }
-        else{
+        } else {
             return redirect('/siswa')->with('error', 'Data siswa gagal dihapus');
         }
     }

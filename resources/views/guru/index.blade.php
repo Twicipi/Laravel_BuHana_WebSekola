@@ -2,16 +2,13 @@
 <html>
 
 <head>
-    <title>Daftar Kelas</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            /* Hilangkan padding body */
             display: flex;
-            /* Gunakan flex untuk tata letak */
         }
 
         .container {
@@ -23,7 +20,6 @@
             width: calc(100% - 100px);
             /* Sesuaikan lebar konten dengan sisa ruang */
             box-sizing: border-box;
-            /* Sertakan padding dalam perhitungan lebar */
         }
 
         .header {
@@ -97,35 +93,6 @@
             cursor: pointer;
         }
 
-        .search-container {
-            margin-bottom: 20px;
-        }
-
-        .search-container form {
-            display: flex;
-        }
-
-        .search-container input {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            margin-right: 5px;
-            flex-grow: 1;
-        }
-
-        .search-container button {
-            background-color: #007bff;
-            color: white;
-            padding: 8px 15px;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-
-        .search-container button:hover {
-            background-color: #0056b3;
-        }
-
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -142,49 +109,48 @@
     @include('components.sidebar')
     <div class="container">
         <div class="header">
-            <h1>Daftar Kelas</h1>
-            <a href="{{ route('kelas.create') }}" class="btn">Tambah Kelas</a>
+            <h1>Data Guru</h1>
+            <a href="{{ route('guru.create') }}" class="btn">Tambah Guru</a>
         </div>
 
         @if (session('success'))
             <div class="alert">{{ session('success') }}</div>
         @endif
 
-        <div class="search-container">
-            <form action="{{ route('kelas.index') }}" method="GET">
-                <input type="text" name="search" placeholder="Cari kelas..." value="{{ request()->query('search') }}">
-                <button type="submit">Cari</button>
-            </form>
-        </div>
+        <form action="{{ route('guru.index') }}" method="GET" style="margin-bottom: 20px;">
+            <input type="text" name="search" value="{{ old('search', $search) }}"
+                placeholder="Cari berdasarkan NIP atau Nama Guru"
+                style="padding: 8px; border: 1px solid #ddd; border-radius: 3px; width: 250px;">
+            <button type="submit" class="btn" style="background-color: #007bff;">Cari</button>
+        </form>
 
         <table>
             <thead>
                 <tr>
-                    <th>No</th>
-                    <th>Lokasi Ruangan</th>
-                    <th>Nama Kelas</th>
-                    <th>Jurusan</th>
-                    <th>Nama Wali Kelas</th>
+                    <th>NIP</th>
+                    <th>Nama</th>
+                    <th>Jenis Kelamin</th>
+                    <th>Alamat</th>
                     <th colspan="2">Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($kelas as $index => $row)
+                @foreach ($guru as $item)
                     <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $row->lokasi_ruangan }}</td>
-                        <td>{{ $row->kelas }}</td>
-                        <td>{{ $row->jurusan }}</td>
-                        <td>{{ $row->nama_wali_kelas }}</td>
+                        <td>{{ $item->nip }}</td>
+                        <td>{{ $item->nama_guru }}</td>
+                        <td>{{ $item->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
+                        <td>{{ $item->alamat }}</td>
                         <td>
-                            <a href="{{ route('kelas.edit', $row->id) }}" class="action-btn edit-btn">Edit</a>
+                            <a href="{{ route('guru.edit', $item->id) }}" class="action-btn edit-btn">Edit</a>
                         </td>
                         <td>
-                            <form action="{{ route('kelas.destroy', $row->id) }}" method="POST"
+                            <form action="{{ route('guru.destroy', $item->id) }}" method="POST"
                                 style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="action-btn delete-btn">Hapus</button>
+                                <button type="submit" class="action-btn delete-btn"
+                                    onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>
                             </form>
                         </td>
                     </tr>
