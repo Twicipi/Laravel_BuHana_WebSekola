@@ -1,4 +1,7 @@
 <div class="sidebar">
+    <h1>
+        Opat Bandung
+    </h1>
     <ul>
         <li><a href="{{ route('guru.index') }}">Data Guru</a></li>
         <li><a href="{{ route('siswa.index') }}">Data Siswa</a></li>
