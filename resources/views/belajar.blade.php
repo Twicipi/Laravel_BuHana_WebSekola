@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <title>Data Siswa</title>
     <style>
         body {
@@ -18,7 +19,7 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             padding: 20px;
             margin-left: 220px;
-            width: calc(100% - 100px); /* Sesuaikan lebar konten dengan sisa ruang */
+            width: calc(100% - 100px);
             box-sizing: border-box;
         }
 
@@ -139,7 +140,7 @@
     <div class="container">
         <div class="header">
             <h1>Data Siswa</h1>
-            <a href="{{ url('/siswa/create') }}" class="btn">Tambah Data</a>
+            <a href="{{ url('/siswa/create') }}" class="btn"><i class="fas fa-plus"></i> Tambah Data</a>
         </div>
 
         @if (session('success'))

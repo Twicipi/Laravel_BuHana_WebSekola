@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <title>Daftar Kelas</title>
     <style>
         body {
@@ -143,7 +144,7 @@
     <div class="container">
         <div class="header">
             <h1>Daftar Kelas</h1>
-            <a href="{{ route('kelas.create') }}" class="btn">Tambah Kelas</a>
+            <a href="{{ route('kelas.create') }}" class="btn"><i class="fas fa-plus"></i> Tambah Kelas</a>
         </div>
 
         @if (session('success'))
@@ -152,7 +153,8 @@
 
         <div class="search-container">
             <form action="{{ route('kelas.index') }}" method="GET">
-                <input type="text" name="search" placeholder="Cari kelas..." value="{{ request()->query('search') }}">
+                <input type="text" name="search" placeholder="Cari kelas..."
+                    value="{{ request()->query('search') }}">
                 <button type="submit">Cari</button>
             </form>
         </div>

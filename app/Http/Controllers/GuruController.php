@@ -9,7 +9,7 @@ class GuruController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request->input('search'); 
+        $search = $request->input('search');
 
         if ($search) {
             $guru = Guru::where('nip', 'like', "%$search%")
@@ -52,7 +52,7 @@ class GuruController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'nip' => 'required|unique:t_guru,nip,|numeric' . $id,
+            'nip' => "required|unique:t_guru,nip,$id|numeric",
             'nama_guru' => 'required|regex:/^[a-zA-Z\s]+$/',
             'jenis_kelamin' => 'required|in:L,P',
             'alamat' => 'required'
